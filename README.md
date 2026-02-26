@@ -1,12 +1,11 @@
-﻿### How to run:
+﻿# How to run:
 
-```bash
-docker compose up --build -d
-```
+Postman link: https://www.postman.com/speeding-water-661393/workspace/crewred-test
 
 ## Local Run
 
 ### Example of .env for local testing:
+
 ```env
 DB_NAME=travel_planer
 DB_USER=postgres
@@ -33,4 +32,10 @@ DB_USER=postgres
 DB_PASSWORD=password
 DB_HOST=db
 DB_PORT=5432
+```
+
+Run
+
+```bash
+docker compose up --build -d
 ```
