@@ -7,7 +7,7 @@ class Place(TimeStampedModel):
     project = models.ForeignKey('planner.TravelProject', on_delete=models.CASCADE, related_name='places')
     external_id = models.CharField()
 
-    notes = models.TextField()
+    notes = models.TextField(blank=True, null=True)
     is_visited = models.BooleanField(default=False)
 
     class Meta:
