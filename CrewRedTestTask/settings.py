@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -28,7 +29,8 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
 
-    'apps.planner'
+    'apps.planner',
+    'apps.users'
 
 ]
 
@@ -40,6 +42,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'CrewRedTestTask.urls'
@@ -106,7 +109,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'apps.users.authentication.CookieJWTAuthentication',
+        'apps.users.authentication.CookieJWTAuthentication',
     ),
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
@@ -119,6 +122,19 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
 }
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "UPDATE_LAST_LOGIN": True,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "AUTH_COOKIE_HTTP_ONLY": True,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
+AUTH_USER_MODEL = 'users.User'
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Travel PLanner',
