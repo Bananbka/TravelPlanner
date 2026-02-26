@@ -1,5 +1,6 @@
 ﻿import requests
 from django.core.cache import cache
+from rest_framework.exceptions import ValidationError
 
 ARTIC_BASE_URL = "https://api.artic.edu/api/v1"
 
@@ -25,7 +26,7 @@ def validate_place_exists(external_id: str) -> bool:
 
         response.raise_for_status()
     except requests.RequestException:
-        raise ValueError("Third-party API is currently unavailable.")
+        raise ValidationError("Third-party API is currently unavailable.")
 
     return False
 
@@ -45,4 +46,4 @@ def search_places(query: str, limit: int = 10) -> list:
 
         return response.json().get('data', [])
     except requests.RequestException as e:
-        raise ValueError("Third-party API is currently unavailable.")
+        raise ValidationError("Third-party API is currently unavailable.")

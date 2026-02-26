@@ -1,9 +1,8 @@
-﻿from rest_framework import viewsets, status, filters
+﻿from rest_framework import viewsets, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError as DRFValidationError
-from django.core.exceptions import ValidationError as DjangoValidationError
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.views import APIView
@@ -32,7 +31,7 @@ class TravelProjectViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         try:
             instance.delete()
-        except DjangoValidationError as e:
+        except ValidationError as e:
             return Response(
                 {"detail": e.message},
                 status=status.HTTP_400_BAD_REQUEST
@@ -59,14 +58,14 @@ class PlaceViewSet(viewsets.ModelViewSet):
         project = serializer.validated_data['project']
 
         if project.user != self.request.user:
-            raise DRFValidationError({"project": "You do not have permission to add places to this project."})
+            raise ValidationError({"project": "You do not have permission to add places to this project."})
 
         if project.places.count() >= 10:
-            raise DRFValidationError({"detail": "This project already has the maximum of 10 places."})
+            raise ValidationError({"detail": "This project already has the maximum of 10 places."})
 
         external_id = serializer.validated_data['external_id']
         if not validate_place_exists(external_id):
-            raise DRFValidationError(
+            raise ValidationError(
                 {"external_id": f"Place with ID '{external_id}' does not exist in Art Institute API."})
 
         serializer.save()
