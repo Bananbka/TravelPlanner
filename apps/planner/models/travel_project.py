@@ -1,5 +1,5 @@
-﻿from django.db import models
-from jsonschema import ValidationError
+﻿from django.core.exceptions import ValidationError
+from django.db import models
 
 from apps.core.models import TimeStampedModel
 
